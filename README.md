@@ -2,7 +2,7 @@
 
 [![Overall](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fapp.opslevel.com%2Fapi%2Fservice_level%2FwEg8QXkC0oXavVATcVCoJpR4LWDMlgbCCuxt1Nh6S0M)](https://app.opslevel.com/services/aem-performance-testing/maturity-report)
 
-The project contains performance tests for AEM microservice https://github.com/KWRI/aem-performance-testing
+The project contains performance tests for mc-recruits microservice https://github.com/KWRI/mc-recruits-performance-testing
 
 ## How to run tests from command line
 
@@ -78,13 +78,13 @@ public class DemoSim extends Auth {
                   http("GET /orgs")
                           .get(ORGS.getUrl())
                           .header("Authorization", "Bearer " + "#{token}")
-                          .header(KW_HEADER_NAME, CORECAP_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
+                          .header(KW_HEADER_NAME, TEAMSBRAV0_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
                           .check(status().is(SC_OK))
                           .check(jsonPath("$.pagination.total").not("0")));
 
   //    Scenario Initialization
 
-  ScenarioBuilder scnGetAuthorizationToken = scenario("Get AuthorizationToken").exec(login(CORECAP_MC_MCA));
+  ScenarioBuilder scnGetAuthorizationToken = scenario("Get AuthorizationToken").exec(login(TEAMSBRAV0_MC_MCA));
   ScenarioBuilder scnGetOrgsRequest = scenario("GET /orgs").exec(getOrgs);
 
   //    Execution configurations
@@ -136,7 +136,7 @@ ChainBuilder getOrgs = exec(session -> session.set("token", token))
                 http("GET /orgs")
                         .get(ORGS.getUrl())
                         .header("Authorization", "Bearer " + "#{token}")
-                        .header(KW_HEADER_NAME, CORECAP_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
+                        .header(KW_HEADER_NAME, TEAMSBRAV0_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
                         .check(status().is(SC_OK))
                         .check(jsonPath("$.pagination.total").not("0")));
 ```
@@ -150,7 +150,7 @@ ChainBuilder getOrgs = exec(session -> session.set("token", token))
 Next step - initialize scenarios to inject.
 
 ```java
-ScenarioBuilder scnGetAuthorizationToken = scenario("Get AuthorizationToken").exec(login(CORECAP_MC_MCA));
+ScenarioBuilder scnGetAuthorizationToken = scenario("Get AuthorizationToken").exec(login(TEAMSBRAV0_MC_MCA));
 ScenarioBuilder scnGetOrgsRequest = scenario("GET /orgs").exec(getOrgs);
 ```
 
@@ -287,7 +287,7 @@ ChainBuilder getOrgById = exec(session -> session.set("token", token))
                 http("GET /orgs/:id")
                         .get(ORGS.getUrl("#{orgId}"))
                         .header("Authorization", "Bearer " + "#{token}")
-                        .header(KW_HEADER_NAME, CORECAP_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
+                        .header(KW_HEADER_NAME, TEAMSBRAV0_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
                         .check(status().is(SC_OK)));
 ```
 

@@ -1,10 +1,10 @@
-package com.kwri.auto.aem.data;
+package com.kwri.auto.mcrecruits.data;
 
 /**
  * List of users used in repository.
  */
 public enum User {
-    CORECAP_MC_MCA("CoreCapMcMCA", "teams/core_capabilities/password", "password", "CoreCapUsers");
+    TEAMSBRAV0_MC_MCA("MCATeamsBravo", "teams/teamBravo/test_bravo_pass", "password", "test_bravo_pass");
     private final String login;
     private final String secretPath;
     private final String secretKey;

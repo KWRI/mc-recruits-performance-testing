@@ -1,6 +1,6 @@
-package com.kwri.auto.aem.run.simulations.members;
+package com.kwri.auto.mcrecruits.run.simulations.tags;
 
-import com.kwri.auto.aem.auth.Auth;
+import com.kwri.auto.mcrecruits.auth.Auth;
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.ThrottleStep;
@@ -8,38 +8,33 @@ import io.gatling.javaapi.core.ThrottleStep;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kwri.auto.aem.data.Endpoints.MEMBERS;
-import static com.kwri.auto.aem.data.User.CORECAP_MC_MCA;
-import static io.gatling.javaapi.core.CoreDsl.exec;
-import static io.gatling.javaapi.core.CoreDsl.global;
-import static io.gatling.javaapi.core.CoreDsl.holdFor;
-import static io.gatling.javaapi.core.CoreDsl.incrementConcurrentUsers;
-import static io.gatling.javaapi.core.CoreDsl.reachRps;
-import static io.gatling.javaapi.core.CoreDsl.scenario;
+import static com.kwri.auto.mcrecruits.data.Endpoints.TAGS;
+import static com.kwri.auto.mcrecruits.data.User.TEAMSBRAV0_MC_MCA;
+import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.core.OpenInjectionStep.atOnceUsers;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 import static org.apache.http.HttpStatus.SC_OK;
 
 /**
- * This is simulation for GET /members end-point with x-userInfo header as auth method.
+ * This is simulation for GET /mc-recruits/api/v3/tags end-point.
  */
-public class MembersViaHeaderNoAuthSimulation extends Auth {
+public class TagsSimulation extends Auth {
 
     //  Builder initialization
-    ChainBuilder getMembers = exec(session -> session.set("token", token))
+    ChainBuilder getTags = exec(session -> session.set("token", token))
             .exec(
-                            http("GET /members")
-                                    .get(MEMBERS.getUrl())
-                                    .header("x-kwri-org", "1005484902")
+                            http("GET /mc-recruits/api/v3/tags")
+                                    .get(TAGS.getUrl())
+                                    .header("x-kwri-apigee-app-name", "devhub")
                                     .header("Authorization", "Bearer " + "#{token}")
-                                    .header(KW_HEADER_NAME, CORECAP_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
+                                    .header(KW_HEADER_NAME, TEAMSBRAV0_MC_MCA.getLogin() + ", " + this.getClass().toGenericString())
                                     .check(status().is(SC_OK))
             );
 
     //    Scenario Initialization
-    ScenarioBuilder scnGetAuthorizationToken = scenario("Get Authorization Token").exec(login(CORECAP_MC_MCA));
-    ScenarioBuilder scnGetMembersRequest = scenario("GET /members").exec(getMembers);
+    ScenarioBuilder scnGetAuthorizationToken = scenario("Get Authorization Token").exec(login(TEAMSBRAV0_MC_MCA));
+    ScenarioBuilder scnGetMembersRequest = scenario("GET /mc-recruits/api/v3/tags").exec(getTags);
 
     //    Execution configurations
     {

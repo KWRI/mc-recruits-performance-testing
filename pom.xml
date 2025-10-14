@@ -3,8 +3,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kwri.aem-tests</groupId>
-    <artifactId>aem-performance-testing</artifactId>
+    <groupId>com.kwri.mc-recruits-tests</groupId>
+    <artifactId>mc-recruits-performance-testing</artifactId>
     <version>1.0.0</version>
 
     <properties>

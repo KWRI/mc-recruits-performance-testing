@@ -1,4 +1,4 @@
-package com.kwri.auto.aem.run;
+package com.kwri.auto.mcrecruits.run;
 
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -70,9 +70,9 @@ public class SimulationBase extends Simulation {
      * This method serve default http protocol for all requests in simulation.
      */
     protected HttpProtocolBuilder v1HttpProtocol =
-            http.baseUrl(getUrl() + "application-entitlements/api/v1/")
+            http.baseUrl(getUrl())
                     .acceptHeader("application/json")
-                    .userAgentHeader("Avengers AEM Performance")
+                    .userAgentHeader("Teams Bravo mc-recruits Performance")
                     .disableCaching();
 
 }

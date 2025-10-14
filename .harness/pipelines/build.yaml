@@ -1,14 +1,14 @@
 pipeline:
-  name: aem-performance-testing build
-  identifier: aemperformancetesting_build
-  projectIdentifier: CoreCapabilities
+  name: mc-recruits-performance-testing build
+  identifier: mcrecruitsperformancetesting_build
+  projectIdentifier: TeamsBravo
   orgIdentifier: Command
   tags: {}
   properties:
     ci:
       codebase:
         connectorRef: account.Github
-        repoName: aem-performance-testing
+        repoName: mc-recruits-performance-testing
         build:
           type: branch
           spec:
@@ -49,7 +49,7 @@ pipeline:
                     envVariables:
                       CLIENT_ID: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/platform/auth-test#ClientId")>
                       CLIENT_SECRET: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/platform/auth-test#ClientSecret")>
-                      CORE_CAPABILITIES_PASS: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/core_capabilities/password#password")>
+                      TEAMS_BRAVO_PASS: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/teamBravo/test_bravo_pass#test_bravo_pass")>
                       GOOGLE_APPLICATION_CREDENTIALS: /harness/.config/gcloud/application_default_credentials.json
                     shell: Bash
                     command: |-
@@ -91,7 +91,7 @@ pipeline:
             type: String
             description: ""
             required: true
-            value: <+input>.default(aem.run.simulations.members.MembersViaHeaderNoAuthSimulation)
+            value: <+input>.default(mcrecruits.run.simulations.tags.TagsSimulation)
           - name: INCREMENT_CONCURRENT_USERS
             type: String
             description: ""
