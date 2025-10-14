@@ -1,0 +1,40 @@
+inputSet:
+  name: on_demand
+  identifier: on_demand
+  orgIdentifier: Command
+  projectIdentifier: CoreCapabilities
+  pipeline:
+    identifier: aemperformancetesting_build
+    stages:
+      - stage:
+          identifier: build
+          type: CI
+          variables:
+            - name: ENV
+              type: String
+              value: <+trigger.payload.ENV>
+            - name: SIMULATION_CLASS
+              type: String
+              value: <+trigger.payload.SIMULATION_CLASS>
+            - name: INCREMENT_CONCURRENT_USERS
+              type: String
+              value: <+trigger.payload.INCREMENT_CONCURRENT_USERS>
+            - name: TIMES
+              type: String
+              value: <+trigger.payload.TIMES>
+            - name: EACH_LEVEL_LASTING
+              type: String
+              value: <+trigger.payload.EACH_LEVEL_LASTING>
+            - name: SEPARATED_BY_RAMPS_LASTING
+              type: String
+              value: <+trigger.payload.SEPARATED_BY_RAMPS_LASTING>
+            - name: STARTING_FROM
+              type: String
+              value: <+trigger.payload.STARTING_FROM>
+    variables:
+      - name: branch
+        type: String
+        value: <+trigger.payload.branch>
+      - name: mvnTestCompileOnly
+        type: String
+        value: <+trigger.payload.mvnTestCompileOnly>

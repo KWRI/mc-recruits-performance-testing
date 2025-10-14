@@ -1,0 +1,40 @@
+inputSet:
+  name: mvn_test_compile
+  identifier: mvn_test_compile
+  orgIdentifier: Command
+  projectIdentifier: CoreCapabilities
+  pipeline:
+    identifier: aemperformancetesting_build
+    stages:
+      - stage:
+          identifier: build
+          type: CI
+          variables:
+            - name: ENV
+              type: String
+              value: "qa"
+            - name: SIMULATION_CLASS
+              type: String
+              value: "aem.run.simulations.members.MembersViaHeaderNoAuthSimulation"
+            - name: INCREMENT_CONCURRENT_USERS
+              type: String
+              value: "1"
+            - name: TIMES
+              type: String
+              value: "1"
+            - name: EACH_LEVEL_LASTING
+              type: String
+              value: "1"
+            - name: SEPARATED_BY_RAMPS_LASTING
+              type: String
+              value: "1"
+            - name: STARTING_FROM
+              type: String
+              value: "1"
+    variables:
+      - name: branch
+        type: String
+        value: <+trigger.targetBranch>
+      - name: mvnTestCompileOnly
+        type: String
+        value: "true"

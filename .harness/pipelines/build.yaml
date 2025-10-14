@@ -1,0 +1,199 @@
+pipeline:
+  name: aem-performance-testing build
+  identifier: aemperformancetesting_build
+  projectIdentifier: CoreCapabilities
+  orgIdentifier: Command
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.Github
+        repoName: aem-performance-testing
+        build:
+          type: branch
+          spec:
+            branch: <+pipeline.variables.branch>
+  stages:
+    - stage:
+        name: Build
+        identifier: build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - stepGroup:
+                  name: Activate Google service account using OIDC
+                  identifier: Activate_oidc_ci
+                  template:
+                    templateRef: org.Activate_oidc_ci
+                    versionLabel: v0.0.1
+                    gitBranch: main
+              - step:
+                  type: Run
+                  name: Run Load Test
+                  identifier: Run_Load_Test
+                  spec:
+                    envVariables:
+                      CLIENT_ID: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/platform/auth-test#ClientId")>
+                      CLIENT_SECRET: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/platform/auth-test#ClientSecret")>
+                      CORE_CAPABILITIES_PASS: <+secrets.getValue("org.hashicorpvault://vault<+pipeline.stages.build.variables.ENV>/testops/manual/teams/core_capabilities/password#password")>
+                      GOOGLE_APPLICATION_CREDENTIALS: /harness/.config/gcloud/application_default_credentials.json
+                    shell: Bash
+                    command: |-
+                      envsubst < src/test/resources/passwords.properties.dist > src/test/resources/passwords.properties
+                      echo "Current environment test: $ENV"
+                      mvn clean gatling:test -Dgatling.simulationClass=com.kwri.auto.$SIMULATION_CLASS -Denv=$ENV -DincrementConcurrentUsers=$INCREMENT_CONCURRENT_USERS -Dtimes=$TIMES -DeachLevelLasting=$EACH_LEVEL_LASTING -DseparatedByRampsLasting=$SEPARATED_BY_RAMPS_LASTING -DstartingFrom=$STARTING_FROM
+              - step:
+                  name: Send Gatling results to bucket using OIDC
+                  identifier: Send_Gatling_results_to_bucket_using_OIDC
+                  template:
+                    templateRef: org.Send_Gatling_results_to_bucket_using_OIDC
+                    versionLabel: v0.0.1
+                    gitBranch: main
+                    templateInputs:
+                      type: Run
+                      spec:
+                        envVariables:
+                          APPLICATION: aem
+                          ENVIRONMENT: <+pipeline.stages.build.variables.ENV>
+                  when:
+                    stageStatus: All
+              - step:
+                  name: Upload Artifacts
+                  identifier: Upload_Artifacts
+                  type: Plugin
+                  spec:
+                    connectorRef: account.Dockerhub
+                    image: plugins/artifact-metadata-publisher
+                    settings:
+                      file_urls:
+                        - Gatling:::<+pipeline.stages.build.spec.execution.steps.Send_Gatling_results_to_bucket_using_OIDC.output.outputVariables.perfLink>
+        variables:
+          - name: ENV
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(qa).allowedValues(qa,dev,prod)
+          - name: SIMULATION_CLASS
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(aem.run.simulations.members.MembersViaHeaderNoAuthSimulation)
+          - name: INCREMENT_CONCURRENT_USERS
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(1)
+          - name: TIMES
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(1)
+          - name: EACH_LEVEL_LASTING
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(1)
+          - name: SEPARATED_BY_RAMPS_LASTING
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(1)
+          - name: STARTING_FROM
+            type: String
+            description: ""
+            required: true
+            value: <+input>.default(1)
+          - name: JAVA_HOME
+            type: String
+            description: ""
+            required: false
+            value: /usr/lib/jvm/temurin-17-jdk-amd64
+        when:
+          pipelineStatus: All
+          condition: <+pipeline.variables.mvnTestCompileOnly> == "false"
+    - stage:
+        name: Maven test compile
+        identifier: maven_test_compile
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - stepGroup:
+                  name: Activate Google service account using OIDC
+                  identifier: Activate_oidc_ci
+                  template:
+                    templateRef: org.Activate_oidc_ci
+                    versionLabel: v0.0.1
+                    gitBranch: main
+              - step:
+                  type: Run
+                  name: Maven test compile
+                  identifier: maven_test_compile
+                  spec:
+                    envVariables:
+                      GOOGLE_APPLICATION_CREDENTIALS: /harness/.config/gcloud/application_default_credentials.json
+                    shell: Bash
+                    command: |
+                      mvn -DskipTests clean dependency:resolve-plugins dependency:go-offline
+        variables:
+          - name: JAVA_HOME
+            type: String
+            description: ""
+            required: false
+            value: /usr/lib/jvm/temurin-17-jdk-amd64
+        when:
+          pipelineStatus: All
+          condition: <+pipeline.variables.mvnTestCompileOnly> == "true"
+  variables:
+    - name: branch
+      type: String
+      description: ""
+      required: true
+      value: <+input>.default(main)
+    - name: mvnTestCompileOnly
+      type: String
+      description: ""
+      required: true
+      value: <+input>.default(true).allowedValues(true,false)
+  notificationRules:
+    - name: Slack notify
+      identifier: Slack_notify
+      pipelineEvents:
+        - type: StageFailed
+          forStages:
+            - build
+        - type: StageSuccess
+          forStages:
+            - build
+      notificationMethod:
+        type: Slack
+        spec:
+          userGroups: []
+          webhookUrl: <+secrets.getValue("SLACK_WEBHOOK_AUTOMATION")>
+      enabled: true

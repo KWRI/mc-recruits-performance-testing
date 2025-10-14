@@ -1,0 +1,10 @@
+/target/
+/.idea
+/src/test/resources/passwords.properties
+*.iml
+/.allure/
+/.logs/
+.java-version
+allure-results/
+/logs
+/src/test/resources/logback-test.xml
