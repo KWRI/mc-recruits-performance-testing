@@ -1,7 +1,7 @@
 inputSet:
   name: on_demand
   identifier: on_demand
-  orgIdentifier: TeamsBravo
+  orgIdentifier: Command
   projectIdentifier: TeamsBravo
   pipeline:
     identifier: mcrecruitsperformancetesting_build
