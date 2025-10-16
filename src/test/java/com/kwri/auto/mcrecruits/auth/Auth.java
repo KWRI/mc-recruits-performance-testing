@@ -29,20 +29,12 @@ public class Auth extends SimulationBase {
         return tryMax(2).on(
                 exec(session -> {
                     try {
-                        GlobalWorldFacade globalWorldFacade = Guice.createInjector(new BindingGuiceModule())
-                                .getInstance(GlobalWorldFacade.class);
-                        String password = loadProperties().getProperty(user.getPassword());
-                        System.out.println("PASSWORD " + password);
                         String oauth2Uri = loadProperties().getProperty("test.oauth2_uri");
-                        System.out.println("oauth2_uri " + oauth2Uri);
-                        System.out.println("username " + user.getLogin());
-
                         String body = "{ \"username\": \"" + user.getLogin() + "\", \"password\": \""
-                                + password + "\"}";
-                        GlobalWorld globalWorld = Guice.createInjector(new BindingGuiceModule())
-                                .getInstance(GlobalWorld.class);
+                                + loadProperties().getProperty(user.getPassword()) + "\"}";
+                        Injector injector = Guice.createInjector(new BindingGuiceModule());
+                        GlobalWorld globalWorld = injector.getInstance(GlobalWorld.class);
                         Response response = globalWorld.login(oauth2Uri, body);
-                        System.out.println("RESPONSE" + response.asPrettyString());
                         token = response.jsonPath().get(ACCESS_TOKEN);
                         return session;
                     } catch (Exception e) {

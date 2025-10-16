@@ -5,8 +5,8 @@ package com.kwri.auto.mcrecruits.data;
  */
 public enum Endpoints {
     LOGIN("login"),
-    MEMBERS("members"),
-    TAGS("mc-recruits/api/v3/tags");
+    TAGS("mc-recruits/api/v3/tags"),
+    MC_RECRUITS_ORGS_LEADS("/orgs", "/association-roles");
 
     private final String url;
     private String url2;

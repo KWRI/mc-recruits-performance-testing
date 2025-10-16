@@ -72,6 +72,7 @@ public class SimulationBase extends Simulation {
     protected HttpProtocolBuilder v1HttpProtocol =
             http.baseUrl(getUrl())
                     .acceptHeader("application/json")
+                    .header("x-kwri-client-id", "devhub")
                     .userAgentHeader("Teams Bravo mc-recruits Performance")
                     .disableCaching();
 
