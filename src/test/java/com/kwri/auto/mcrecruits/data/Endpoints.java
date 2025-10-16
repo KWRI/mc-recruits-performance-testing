@@ -1,11 +1,12 @@
-package com.kwri.auto.aem.data;
+package com.kwri.auto.mcrecruits.data;
 
 /**
  * List of end-points used in this repository.
  */
 public enum Endpoints {
     LOGIN("login"),
-    MEMBERS("members");
+    TAGS("mc-recruits/api/v3/tags"),
+    MC_RECRUITS_ORGS_LEADS("/orgs", "/association-roles");
 
     private final String url;
     private String url2;

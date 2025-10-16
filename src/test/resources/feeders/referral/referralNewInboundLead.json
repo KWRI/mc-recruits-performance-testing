@@ -1,0 +1,43 @@
+{
+  "source": {
+    "recruitSource": "devhub",
+    "attributes": [
+      {
+        "key": "screeningQuestions",
+        "value": [
+          {
+            "question": "What is your highest level of education?",
+            "answer": "Bachelor's degree"
+          },
+          {
+            "question": "Some question?",
+            "answer": "Some answer"
+          }
+        ]
+      }
+    ]
+  },
+  "recruitData": {
+    "firstName": "TeamsBravo#{name}",
+    "lastName": "PerfTest#{name}",
+    "email": "#{email}",
+    "phone": "+1 410 599 8999",
+    "phoneCountry": "US",
+    "recruitType": "Agent",
+    "activeLicensed": true,
+    "unitsSoldPerYear": 8,
+    "brokerageName": "Short & Faster",
+    "affiliation": "KW",
+    "notes": "Experienced agent",
+    "tagIds": [
+      4,
+      5
+    ]
+  },
+  "refererData": {
+    "firstName": "Pamela",
+    "lastName": "Chu",
+    "email": "PamelaChoo@example.com",
+    "phone": "+15123273079"
+  }
+}

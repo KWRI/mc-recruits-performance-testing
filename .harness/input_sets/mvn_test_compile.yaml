@@ -2,9 +2,9 @@ inputSet:
   name: mvn_test_compile
   identifier: mvn_test_compile
   orgIdentifier: Command
-  projectIdentifier: CoreCapabilities
+  projectIdentifier: TeamsBravo
   pipeline:
-    identifier: aemperformancetesting_build
+    identifier: mcrecruitsperformancetesting_build
     stages:
       - stage:
           identifier: build
@@ -15,7 +15,7 @@ inputSet:
               value: "qa"
             - name: SIMULATION_CLASS
               type: String
-              value: "aem.run.simulations.members.MembersViaHeaderNoAuthSimulation"
+              value: "mcrecruits.run.simulations.tags.TagsSimulation"
             - name: INCREMENT_CONCURRENT_USERS
               type: String
               value: "1"

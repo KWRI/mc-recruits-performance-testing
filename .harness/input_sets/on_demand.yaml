@@ -1,10 +1,10 @@
 inputSet:
   name: on_demand
   identifier: on_demand
-  orgIdentifier: Command
-  projectIdentifier: CoreCapabilities
+  orgIdentifier: TeamsBravo
+  projectIdentifier: TeamsBravo
   pipeline:
-    identifier: aemperformancetesting_build
+    identifier: mcrecruitsperformancetesting_build
     stages:
       - stage:
           identifier: build

@@ -1,7 +1,8 @@
-package com.kwri.auto.aem.auth;
+package com.kwri.auto.mcrecruits.auth;
 
-import com.kwri.auto.aem.data.User;
-import com.kwri.auto.aem.run.SimulationBase;
+import com.kwri.auto.core.internal.context.GlobalWorldFacade;
+import com.kwri.auto.mcrecruits.data.User;
+import com.kwri.auto.mcrecruits.run.SimulationBase;
 import com.kwri.auto.core.internal.context.GlobalWorld;
 import io.gatling.javaapi.core.ChainBuilder;
 import io.restassured.response.Response;
